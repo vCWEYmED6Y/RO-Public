@@ -10,7 +10,7 @@
 	-- DO NOT TOUCH UNLESS TRYING TO HELP ME!
 	Debug = {
 		Notifications = true,
-		Offset = CFrame.new(2.5,0,0),
+		Offset = CFrame.new(0,0,-2.8),
 		LoopPlayerTP = false,
 	}
 }]]
@@ -97,7 +97,7 @@ sendNotification({
 	["duration"] = .5,
 })
 while task.wait() do
-	ownerCharacter:SetPrimaryPartCFrame((ownerCharacter.PrimaryPart.CFrame*_debug.Offset)*CFrame.new(math.rad(180),0,0))
+	ownerCharacter:SetPrimaryPartCFrame((ownerCharacter.PrimaryPart.CFrame*_debug.Offset) * CFrame.Angles(0,math.rad(180),0))
 	local distance = (ownerCharacter.PrimaryPart.Position-root.Position).Magnitude
 	
 	if distance <= 5 then
