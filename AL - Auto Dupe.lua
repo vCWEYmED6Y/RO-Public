@@ -21,6 +21,7 @@ local _debug = _settings.Debug
 local players = game:GetService("Players")
 local starterGui = game:GetService("StarterGui")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+local teleportService = game:GetService("TeleportService")
 
 local remotes = replicatedStorage:WaitForChild("Remotes")
 local inventoryRemote = remotes:WaitForChild("Information"):WaitForChild("InventoryManage")
@@ -97,7 +98,7 @@ sendNotification({
 	["duration"] = .5,
 })
 while task.wait() do
-	ownerCharacter:SetPrimaryPartCFrame((ownerCharacter.PrimaryPart.CFrame*_debug.Offset) * CFrame.Angles(0,math.rad(180),0))
+	character:SetPrimaryPartCFrame((ownerCharacter.PrimaryPart.CFrame*_debug.Offset) * CFrame.Angles(0,math.rad(180),0))
 	local distance = (ownerCharacter.PrimaryPart.Position-root.Position).Magnitude
 	
 	if distance <= 5 then
@@ -118,7 +119,8 @@ for i, v in pairs(_settings.ItemsToDupe) do
 	if not owned then continue end 
 	table.insert(ownedItems, {
 		["Path"] = itemPath,
-		["Amount"] = itemAmount
+		["Amount"] = itemAmount,
+		["Name"] = v
 	})
 end
 task.wait(.5)
@@ -140,4 +142,31 @@ assignSeparateThread(function()
 		end 
 	end 
 end)
+
 task.wait(_settings.DupeWait)
+
+local storedCount = {}
+for _, item in ownedItems do 
+	local path = item.Path
+	local amount = item.Amount
+	local itemName = item.Name 
+	storedCount[itemName] = math.clamp(amount, 0, _settings.MaxAmountToDrop)
+	
+	if path.Parent ~= nil and amount > 0 then 
+		sendNotification({
+			["title"] = "AL - Dupe",
+			["text"] = ("Dropping: " .. itemName),
+			["duration"] = 1,
+		})
+		while task.wait() do 
+			local currentAmount = getItemCount(itemName)
+			if currentAmount <= 0 then 
+				break
+			end
+			inventoryRemote:FireServer("Drop", itemName)
+		end
+	end
+end
+task.wait(.2)
+player:Kick("On Purpose :3")
+teleportService:Teleport(game.PlaceId, player)
