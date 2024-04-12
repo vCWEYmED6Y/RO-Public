@@ -97,7 +97,7 @@ sendNotification({
 	["duration"] = .5,
 })
 while task.wait() do
-	ownerCharacter:SetPrimaryPartCFrame(ownerCharacter.PrimaryPart.CFrame + _debug.Offset)
+	ownerCharacter:SetPrimaryPartCFrame((ownerCharacter.PrimaryPart.CFrame*_debug.Offset)*CFrame.new(math.rad(180),0,0))
 	local distance = (ownerCharacter.PrimaryPart.Position-root.Position).Magnitude
 	
 	if distance <= 5 then
