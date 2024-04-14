@@ -10,23 +10,22 @@
 	-- DO NOT TOUCH UNLESS TRYING TO HELP ME!
 	Debug = {
 		Notifications = true,
-		Offset = CFrame.new(0,0,-2.8),
-		LoopPlayerTP = false,
 	}
 }]]
 
-print("wrong version")
-return
+
 local _settings = _G.Settings
-local _debug = _settings.Debug
+local _debug = _settings.Debug or {}
 local players = game:GetService("Players")
 local starterGui = game:GetService("StarterGui")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local teleportService = game:GetService("TeleportService")
 
+local senv = getsenv(players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("Inventory"):WaitForChild("InventoryHandle"))
 local remotes = replicatedStorage:WaitForChild("Remotes")
 local inventoryRemote = remotes:WaitForChild("Information"):WaitForChild("InventoryManage")
 local updateHotbar = remotes:WaitForChild("Data"):WaitForChild("UpdateHotbar")
+local FireServer = senv._G.FireServer
 
 local player = players.LocalPlayer
 local inventory = player.Backpack:WaitForChild("Tools")
@@ -72,7 +71,7 @@ local function findPlayerFromID(id)
 		 if v.UserId == id then
 			_player = v 
 			if v.Character then 
-				_hasCharacter = true
+				_hasCharacter = v.Character
 			end
 		end
 	end
@@ -99,13 +98,11 @@ sendNotification({
 	["duration"] = .5,
 })
 while task.wait() do
-	character:SetPrimaryPartCFrame((ownerCharacter.PrimaryPart.CFrame*_debug.Offset) * CFrame.Angles(0,math.rad(180),0))
+	character:SetPrimaryPartCFrame((ownerCharacter.PrimaryPart.CFrame*CFrame.new(0,0,-2.8)) * CFrame.Angles(0,math.rad(180),0))
 	local distance = (ownerCharacter.PrimaryPart.Position-root.Position).Magnitude
 	
 	if distance <= 5 then
-		if not _settings.Debug.LoopPlayerTP then
-			break
-		end
+		break
 	end
 end
 sendNotification({
@@ -138,20 +135,18 @@ task.wait(1)
 assignSeparateThread(function()
 	while task.wait() do 
 		for i = 1,3 do 
-			updateHotbar:FireServer({["1"] = "\255"})
-			updateHotbar:FireServer({["\255"] = true})
+			FireServer(updateHotbar, {[1] = "\255"})
+			FireServer(updateHotbar, {[2] = "\255"})
 		end 
 	end 
 end)
 
 task.wait(_settings.DupeWait)
 
-local storedCount = {}
 for _, item in ownedItems do 
 	local path = item.Path
 	local amount = item.Amount
 	local itemName = item.Name 
-	storedCount[itemName] = math.clamp(amount, 0, _settings.MaxAmountToDrop)
 	
 	if path.Parent ~= nil and amount > 0 then 
 		sendNotification({
@@ -161,7 +156,7 @@ for _, item in ownedItems do
 		})
 		while task.wait() do 
 			local currentAmount = getItemCount(itemName)
-			if currentAmount <= 0 then 
+			if amount-currentAmount >= _settings.MaxAmountToDrop or currentAmount <= 0 then 
 				break
 			end
 			inventoryRemote:FireServer("Drop", itemName)
