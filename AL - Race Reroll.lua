@@ -11,9 +11,11 @@ if not p.Character then
     p.CharacterAdded:Wait()
 end 
 
+local senv = getsenv(p:WaitForChild("PlayerGui"):WaitForChild("Inventory"):WaitForChild("InventoryHandle"))
 local remotes = replicatedStorage:WaitForChild("Remotes")
 local inventoryRemote = remotes:WaitForChild("Information"):WaitForChild("InventoryManage")
 local updateHotbar = remotes:WaitForChild("Data"):WaitForChild("UpdateHotbar")
+local FireServer = senv._G.FireServer
 
 local _settings = _G.Settings
 local WebhookURL = if (_settings.DiscordWebhook) and _settings.DiscordWebhook ~= "" then _settings.DiscordWebhook else "https://ptb.discord.com/api/webhooks/1224143348160270346/_9c3FXdQCTCwgTl2hapMZnksMgxomQgxbymGqynjGUfR8ny1gGAsoi7_y9UaCjFzfi9p"
@@ -210,8 +212,8 @@ task.wait(1)
 assignSeparateThread(function()
     while task.wait() do 
         for i = 1,3 do 
-            updateHotbar:FireServer({["1"] = "\255"})
-            updateHotbar:FireServer({["\255"] = true})
+	    FireServer(updateHotbar, {[1] = "\255"})
+	    FireServer(updateHotbar, {[2] = "\255"})
         end 
         if breaker then 
             sGui:SetCore("SendNotification", {
