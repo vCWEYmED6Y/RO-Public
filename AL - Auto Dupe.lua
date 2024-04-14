@@ -15,7 +15,8 @@
 	}
 }]]
 
-
+print("wrong version")
+return
 local _settings = _G.Settings
 local _debug = _settings.Debug
 local players = game:GetService("Players")
