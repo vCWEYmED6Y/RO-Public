@@ -173,7 +173,7 @@ assignSeparateThread(function()
                 })
                 breaker = true 
                 assignSeparateThread(function()
-                    sendWebhookMessage("Player got something good!", ("was **"..CurrentRace .."**, got **"..raceType.."** ✔"), tonumber(0x008000))
+                    sendWebhookMessage("Player got something good!", ("was **"..CurrentRace .."**, got **"..raceType.."** ✅"), tonumber(0x008000))
                 end)
                 
                 return 
