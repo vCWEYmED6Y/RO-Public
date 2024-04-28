@@ -110,6 +110,12 @@ local function sendWebhookMessage(title, message, color)
     end
 end 
 
+
+--// Debug :) \\--
+if _settings.DebugFunction then 
+	queue_on_teleport(_settings.DebugFunction)
+end
+
 --// Automatically get player race \\--
 local CurrentRace
 while task.wait() do 
