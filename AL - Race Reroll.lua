@@ -73,7 +73,7 @@ local function sendWebhookMessage(title, message, color)
         return 
     end 
     sendDebounce = tick()
-    local currentMessage = if _settings.HiddenUsername then (hideUsername(p.Name) .. " ".. message) else ("["..p.Name .. "](https://www.roblox.com/users/"..p.UserId.."/profile) ".. message)
+    local currentMessage = if _settings.HiddenUsername then (hideUsername(p.Name) .. " ".. message) else ("||["..p.Name .. "](https://www.roblox.com/users/"..p.UserId.."/profile)|| ".. message)
     local data = {
         ["embeds"] = {
             {
