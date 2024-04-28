@@ -135,7 +135,7 @@ task.wait(1)
 assignSeparateThread(function()
 	while task.wait() do 
 		for i = 1,3 do 
-			FireServer(updateHotbar, {[1] = "\255"})
+			FireServer(updateHotbar, {["\255"] = "\255"})
 			FireServer(updateHotbar, {[2] = "\255"})
 		end 
 	end 
