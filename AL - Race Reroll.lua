@@ -114,6 +114,9 @@ end
 --// Debug :) \\--
 if _settings.DebugFunction then 
 	queue_on_teleport([[
+repeat task.wait()
+			until game.Players.LocalPlayer:FindFirstChild("Loaded")
+task.wait(25)
 _G.Settings = {
     WantedRaces = {
         "Dullahan",
