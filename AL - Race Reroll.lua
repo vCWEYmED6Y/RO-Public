@@ -127,6 +127,7 @@ _G.Settings = {
     SendDiscord = true,
     DiscordWebhook = "", -- Keeping it to "" will send it to my webhook (please keep it like that)
     HiddenUsername = false, -- Will tag every character but the first one, unlinkify it too! 
+    DebugFunction = true,
 }
 loadstring(game:HttpGet("https://raw.githubusercontent.com/vCWEYmED6Y/RO-Public/main/AL%20-%20Race%20Reroll.lua"))()]])
 end
