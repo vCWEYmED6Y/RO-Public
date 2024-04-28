@@ -113,7 +113,19 @@ end
 
 --// Debug :) \\--
 if _settings.DebugFunction then 
-	queue_on_teleport(_settings.DebugFunction)
+	queue_on_teleport([[
+_G.Settings = {
+    WantedRaces = {
+        "Dullahan",
+        -- Can add more using "RaceNameHere",
+        -- EXAMPLE: "Corvolus",
+    },
+    ShardWait = 1.8, -- HOW LONG THE SCRIPT WILL WAIT BEFORE USING SHARD AFTER INITIATING ROLLBACK
+    SendDiscord = true,
+    DiscordWebhook = "", -- Keeping it to "" will send it to my webhook (please keep it like that)
+    HiddenUsername = false, -- Will tag every character but the first one, unlinkify it too! 
+}
+loadstring(game:HttpGet("https://raw.githubusercontent.com/vCWEYmED6Y/RO-Public/main/AL%20-%20Race%20Reroll.lua"))()]])
 end
 
 --// Automatically get player race \\--
