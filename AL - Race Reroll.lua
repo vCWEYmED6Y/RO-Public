@@ -110,28 +110,6 @@ local function sendWebhookMessage(title, message, color)
     end
 end 
 
-
---// Debug :) \\--
-if _settings.DebugFunction then 
-	queue_on_teleport([[
-repeat task.wait()
-			until game.Players.LocalPlayer:FindFirstChild("Loaded")
-task.wait(25)
-_G.Settings = {
-    WantedRaces = {
-        "Dullahan",
-        -- Can add more using "RaceNameHere",
-        -- EXAMPLE: "Corvolus",
-    },
-    ShardWait = 1.8, -- HOW LONG THE SCRIPT WILL WAIT BEFORE USING SHARD AFTER INITIATING ROLLBACK
-    SendDiscord = true,
-    DiscordWebhook = "", -- Keeping it to "" will send it to my webhook (please keep it like that)
-    HiddenUsername = false, -- Will tag every character but the first one, unlinkify it too! 
-    DebugFunction = true,
-}
-loadstring(game:HttpGet("https://raw.githubusercontent.com/vCWEYmED6Y/RO-Public/main/AL%20-%20Race%20Reroll.lua"))()]])
-end
-
 --// Automatically get player race \\--
 local CurrentRace
 while task.wait() do 
@@ -206,6 +184,35 @@ assignSeparateThread(function()
             elseif raceType == Unidentified then -- You got the race you wanted! yippie!
 
             else
+		if _settings.UseOnRejoin then 
+			queue_on_teleport([[
+repeat task.wait()
+until game.Players.LocalPlayer:FindFirstChild("Loaded")
+task.wait(25)
+_G.Settings = {
+	WantedRaces = {"]].. 
+		table.concat(_settings.WantedRaces, "\", \"")
+	..[["},
+	ShardWait = ]].. 
+		tostring(_settings.ShardWait)
+		..[[,
+	SendDiscord = ]]..
+		tostring(_settings.SendDiscord)
+		..[[,
+	DiscordWebhook = "]].. 
+		_settings.DiscordWebhook
+	..[[",
+	HiddenUsername = ]].. 
+		tostring(_settings.HiddenUsername)
+		..[[,
+	UseOnRejoin = ]].. 
+		tostring(_settings.UseOnRejoin)
+	..[[,
+} 
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/vCWEYmED6Y/RO-Public/main/AL%20-%20Race%20Reroll.lua"))()
+]])
+end
                 assignSeparateThread(function()
                     sendWebhookMessage("Player got something bad...", ("was **"..CurrentRace .."**, got **"..raceType.."** ❌"), tonumber(0xFF0000))
                 end)
