@@ -169,13 +169,13 @@ _G.Settings = {
 		tostring(_settings.OwnerUserID)
 	..[[,
 	ItemsToDupe = {"]].. 
-		table.concat(_settings.WantedRaces, "\", \"")
+		table.concat(_settings.ItemsToDupe , "\", \"")
 	..[["},
 	MaxAmountToDrop  = ]].. 
 		tostring(_settings.MaxAmountToDrop)
 	..[[,
 	DupeWait = ]].. 
-		tostring(_settings.ShardWait)
+		tostring(_settings.DupeWait)
 	..[[,
 	UseOnRejoin = ]].. 
 		tostring(_settings.UseOnRejoin)
