@@ -6,16 +6,11 @@
 	},
 	MaxAmountToDrop = 10,
 	DupeWait = 1.8,
-	
-	-- DO NOT TOUCH UNLESS TRYING TO HELP ME!
-	Debug = {
-		Notifications = true,
-	}
+	UseOnRejoin = true,
 }]]
 
 
 local _settings = _G.Settings
-local _debug = _settings.Debug or {}
 local players = game:GetService("Players")
 local starterGui = game:GetService("StarterGui")
 local replicatedStorage = game:GetService("ReplicatedStorage")
@@ -57,7 +52,7 @@ local function sendNotification(_table)
 	local text = _table.text or "No Message"
 	local duration = _table.duration or .5
 	
-	if not _debug.Notifications then return end
+	if not false then return end
 	starterGui:SetCore("SendNotification",{
 		Title = title;
 		Text = text;
@@ -164,5 +159,31 @@ for _, item in ownedItems do
 	end
 end
 task.wait(.2)
+if _settings.UseOnRejoin then 
+	queue_on_teleport([[
+repeat task.wait()
+until game.Players.LocalPlayer:FindFirstChild("Loaded")
+task.wait(15)
+_G.Settings = {
+	OwnerUserID = ]]..
+		tostring(_settings.OwnerUserID)
+	..[[,
+	ItemsToDupe = {"]].. 
+		table.concat(_settings.WantedRaces, "\", \"")
+	..[["},
+	MaxAmountToDrop  = ]].. 
+		tostring(_settings.MaxAmountToDrop)
+	..[[,
+	DupeWait = ]].. 
+		tostring(_settings.ShardWait)
+	..[[,
+	UseOnRejoin = ]].. 
+		tostring(_settings.UseOnRejoin)
+	..[[,
+} 
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/vCWEYmED6Y/RO-Public/main/AL%20-%20Auto%20Dupe.lua"))()
+]])
+end 
 player:Kick("On Purpose :3")
 teleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId)
