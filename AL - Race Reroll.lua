@@ -114,7 +114,7 @@ end
 local CurrentRace
 while task.wait() do 
     local success, result = pcall(function()
-        return p.PlayerGui.StatMenu.Holder.ContentFrame.Equipment.Body.LeftColumn.Content.Race.Type.Text
+        return p.PlayerGui.StatMenu.Main.Container.Equipment.Race.Body.TextLabel.Text
     end) 
 
     if not success then 
@@ -157,7 +157,7 @@ assignSeparateThread(function()
     })
     while task.wait() do
         local success, errorOrRaceType = pcall(function()
-            return p.PlayerGui.StatMenu.Holder.ContentFrame.Equipment.Body.LeftColumn.Content.Race.Type.Text
+            return p.PlayerGui.StatMenu.Main.Container.Equipment.Race.Body.TextLabel.Text
         end)
 
         if success then
