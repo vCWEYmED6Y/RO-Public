@@ -183,7 +183,10 @@ assignSeparateThread(function()
             if raceType == CurrentRace then -- Race is your current race
                  
             elseif not races:FindFirstChild(success) then -- You got the race you wanted! yippie!
-		
+		assignSeparateThread(function()
+                    sendWebhookMessage("Player got something ... odd?", ("was **"..CurrentRace .."**, got **"..raceType.."** ⚠️"), tonumber(0xFFFF00))
+                end)
+		p:Kick("ERROR: ".. raceType)
             else
 		if _settings.UseOnRejoin then 
 			queue_on_teleport([[
