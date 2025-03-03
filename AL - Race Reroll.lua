@@ -28,6 +28,27 @@ local Headers = {
 local sendDebounce = 0
 
 --// Functions \\--
+local function ReturnCorrectRace()
+	local CurrentRace
+	while task.wait() do 
+	    local success, result = pcall(function()
+	        return p.PlayerGui.StatMenu.Main.Container.Equipment.Race.Body.TextLabel
+	    end) 
+	
+	    if success then 
+	        repeat
+		task.wait()
+		if races:FindFirstChild(result.Text) then
+			CurrentRace = result.Text
+		end
+		until CurrentRace ~= nil
+	    end 
+	
+	    break
+	end 
+	
+	return CurrentRace
+end
 local function assignSeparateThread(func)
     task.spawn(func)
 end 
@@ -112,8 +133,8 @@ local function sendWebhookMessage(title, message, color)
 end 
 
 --// Automatically get player race \\--
-local CurrentRace
-while task.wait() do 
+local CurrentRace = ReturnCorrectRace()
+--[[while task.wait() do 
     local success, result = pcall(function()
         return p.PlayerGui.StatMenu.Main.Container.Equipment.Race.Body.TextLabel.Text
     end) 
@@ -124,7 +145,7 @@ while task.wait() do
     CurrentRace = result
 
     break
-end 
+end ]]
 
 sGui:SetCore("SendNotification", {
     Title = "Race Detector";
@@ -156,10 +177,8 @@ assignSeparateThread(function()
         Text = ("Roll-back is Set and Ready!");
         Duration = 5
     })
-    while task.wait() do
-        local success, errorOrRaceType = pcall(function()
-            return p.PlayerGui.StatMenu.Main.Container.Equipment.Race.Body.TextLabel.Text
-        end)
+    --while task.wait() do
+        local success, errorOrRaceType = true,  ReturnCorrectRace()
 
         if success then
             local raceType = errorOrRaceType
@@ -187,6 +206,8 @@ assignSeparateThread(function()
                     sendWebhookMessage("Player got something ... odd?", ("was **"..CurrentRace .."**, got **"..raceType.."** ⚠️"), tonumber(0xFFFF00))
                 end)
 		p:Kick("ERROR: ".. raceType)
+
+		return
             else
 		if _settings.UseOnRejoin then 
 			queue_on_teleport([[
