@@ -146,7 +146,7 @@ local CurrentRace = ReturnCorrectRace()
 
     break
 end ]]
-
+print(1)
 sGui:SetCore("SendNotification", {
     Title = "Race Detector";
     Text = ("Current Race: ".. CurrentRace);
