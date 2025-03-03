@@ -249,7 +249,7 @@ end
         else
             warn("Error occurred:", errorOrRaceType)
         end
-    end
+    --end
 end)
 task.wait(.5)
 local result, lineageShard = checkValidItem("Lineage Shard")
