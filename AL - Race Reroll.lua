@@ -38,6 +38,8 @@ local function ReturnCorrectRace(oldRace)
 
             if success then 
                 ToReturn = result
+
+                break
             end 
         end
 
