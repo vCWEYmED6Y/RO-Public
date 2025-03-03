@@ -192,7 +192,7 @@ assignSeparateThread(function()
         Text = ("Roll-back is Set and Ready!");
         Duration = 5
     })
-    --while task.wait() do
+    while task.wait() do
         local success, errorOrRaceType = true,  ReturnCorrectRace(classicRace)
 
         if success then
@@ -264,7 +264,7 @@ assignSeparateThread(function()
         else
             warn("Error occurred:", errorOrRaceType)
         end
-    --end
+    end
 end)
 task.wait(.5)
 local result, lineageShard = checkValidItem("Lineage Shard")
