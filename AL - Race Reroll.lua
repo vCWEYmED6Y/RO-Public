@@ -6,6 +6,7 @@ local sGui = game:GetService("StarterGui")
 local ts = game:GetService("TeleportService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local p = players.LocalPlayer
+local races = replicatedStorage:WaitForChild("Rollables"):WaitForChild("Races")
 
 if not p.Character then 
     p.CharacterAdded:Wait()
@@ -114,7 +115,7 @@ end
 local CurrentRace
 while task.wait() do 
     local success, result = pcall(function()
-        return p.PlayerGui.StatMenuOLD.Holder.ContentFrame.Equipment.Body.LeftColumn.Content.Race.Type.Text
+        return p.PlayerGui.StatMenu.Main.Container.Equipment.Race.Body.TextLabel.Text
     end) 
 
     if not success then 
@@ -157,7 +158,7 @@ assignSeparateThread(function()
     })
     while task.wait() do
         local success, errorOrRaceType = pcall(function()
-            return p.PlayerGui.StatMenuOLD.Holder.ContentFrame.Equipment.Body.LeftColumn.Content.Race.Type.Text
+            return p.PlayerGui.StatMenu.Main.Container.Equipment.Race.Body.TextLabel.Text
         end)
 
         if success then
@@ -181,8 +182,8 @@ assignSeparateThread(function()
 
             if raceType == CurrentRace then -- Race is your current race
                  
-            elseif raceType == Unidentified then -- You got the race you wanted! yippie!
-
+            elseif not races:FindFirstChild(success) then -- You got the race you wanted! yippie!
+		
             else
 		if _settings.UseOnRejoin then 
 			queue_on_teleport([[
