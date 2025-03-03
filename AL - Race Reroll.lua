@@ -193,7 +193,7 @@ assignSeparateThread(function()
         Duration = 5
     })
     while task.wait() do
-        local success, errorOrRaceType = true,  ReturnCorrectRace(classicRace)
+        local success, errorOrRaceType = true,  ReturnCorrectRace()
 
         if success then
             local raceType = errorOrRaceType
