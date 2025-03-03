@@ -5,8 +5,8 @@ local players = game:GetService("Players")
 local sGui = game:GetService("StarterGui")
 local ts = game:GetService("TeleportService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
-local p = players.LocalPlayer
 local races = replicatedStorage:WaitForChild("Rollables"):WaitForChild("Races")
+local p = players.LocalPlayer
 
 if not p.Character then 
     p.CharacterAdded:Wait()
@@ -28,21 +28,34 @@ local Headers = {
 local sendDebounce = 0
 
 --// Functions \\--
-local function ReturnCorrectRace()
+local function ReturnCorrectRace(oldRace)
+    local function GetTextLabel()
+        local ToReturn
+        while task.wait() do 
+    	    local success, result = pcall(function()
+    	        return p.PlayerGui.StatMenu.Main.Container.Equipment.Race.Body.TextLabel
+    	    end) 
+
+            if success then 
+                ToReturn = result
+            end 
+        end
+
+        return ToReturn
+    end 
+
 	local CurrentRace
 	while task.wait() do 
-	    local success, result = pcall(function()
-	        return p.PlayerGui.StatMenu.Main.Container.Equipment.Race.Body.TextLabel
-	    end) 
-	
-	    if success then 
-	        repeat
-		task.wait()
-		if races:FindFirstChild(result.Text) then
-			CurrentRace = result.Text
-		end
-		until CurrentRace ~= nil
-	    end 
+	    repeat
+            local result = GetTextLabel()
+            task.wait()
+            local _race = result.Text 
+            if races:FindFirstChild(_race) then
+                if _race ~= oldRace then 
+                    CurrentRace = _race
+                end
+            end
+	    until CurrentRace ~= nil
 	
 	    break
 	end 
@@ -178,7 +191,7 @@ assignSeparateThread(function()
         Duration = 5
     })
     --while task.wait() do
-        local success, errorOrRaceType = true,  ReturnCorrectRace()
+        local success, errorOrRaceType = true,  ReturnCorrectRace(classicRace)
 
         if success then
             local raceType = errorOrRaceType
@@ -202,42 +215,42 @@ assignSeparateThread(function()
             if raceType == CurrentRace then -- Race is your current race
                  
             elseif not races:FindFirstChild(success) then -- You got the race you wanted! yippie!
-		assignSeparateThread(function()
+		        assignSeparateThread(function()
                     sendWebhookMessage("Player got something ... odd?", ("was **"..CurrentRace .."**, got **"..raceType.."** ⚠️"), tonumber(0xFFFF00))
                 end)
-		p:Kick("ERROR: ".. raceType)
+		        p:Kick("ERROR: ".. raceType)
 
-		return
+		        return
             else
-		if _settings.UseOnRejoin then 
-			queue_on_teleport([[
-repeat task.wait()
-until game.Players.LocalPlayer:FindFirstChild("Loaded")
-task.wait(25)
-_G.Settings = {
-	WantedRaces = {"]].. 
-		table.concat(_settings.WantedRaces, "\", \"")
-	..[["},
-	ShardWait = ]].. 
-		tostring(_settings.ShardWait)
-		..[[,
-	SendDiscord = ]]..
-		tostring(_settings.SendDiscord)
-		..[[,
-	DiscordWebhook = "]].. 
-		_settings.DiscordWebhook
-	..[[",
-	HiddenUsername = ]].. 
-		tostring(_settings.HiddenUsername)
-		..[[,
-	UseOnRejoin = ]].. 
-		tostring(_settings.UseOnRejoin)
-	..[[,
-} 
+                if _settings.UseOnRejoin then 
+                    queue_on_teleport([[
+                    repeat task.wait()
+                    until game.Players.LocalPlayer:FindFirstChild("Loaded")
+                    task.wait(25)
+                    _G.Settings = {
+                        WantedRaces = {"]].. 
+                            table.concat(_settings.WantedRaces, "\", \"")
+                        ..[["},
+                        ShardWait = ]].. 
+                            tostring(_settings.ShardWait)
+                            ..[[,
+                        SendDiscord = ]]..
+                            tostring(_settings.SendDiscord)
+                            ..[[,
+                        DiscordWebhook = "]].. 
+                            _settings.DiscordWebhook
+                        ..[[",
+                        HiddenUsername = ]].. 
+                            tostring(_settings.HiddenUsername)
+                            ..[[,
+                        UseOnRejoin = ]].. 
+                            tostring(_settings.UseOnRejoin)
+                        ..[[,
+                    } 
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/vCWEYmED6Y/RO-Public/main/AL%20-%20Race%20Reroll.lua"))()
-]])
-end
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/vCWEYmED6Y/RO-Public/main/AL%20-%20Race%20Reroll.lua"))()
+                    ]])
+                end
                 assignSeparateThread(function()
                     sendWebhookMessage("Player got something bad...", ("was **"..CurrentRace .."**, got **"..raceType.."** ❌"), tonumber(0xFF0000))
                 end)
